@@ -39,12 +39,16 @@ class AsonSerializer {
   }
 
   static List<Field> getDeclaredFields(Class<?> cls, boolean recursive) {
+    List<Field> currentFields;
     Field[] declaredFields = cls.getDeclaredFields();
     if (declaredFields == null || declaredFields.length == 0) {
-      return Collections.emptyList();
+      if (!recursive) {
+        return Collections.emptyList();
+      } else currentFields = new ArrayList<>();
+    } else {
+      currentFields = new ArrayList<>(declaredFields.length);
+      Collections.addAll(currentFields, declaredFields);
     }
-    List<Field> currentFields = new ArrayList<>(declaredFields.length);
-    Collections.addAll(currentFields, declaredFields);
     if (!recursive || cls.getSuperclass() == null || cls.getSuperclass() == Object.class) {
       return currentFields;
     }

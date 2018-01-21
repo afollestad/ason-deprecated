@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/afollestad/ason.svg)](https://travis-ci.org/afollestad/ason)
 [![Codecov](https://img.shields.io/codecov/c/github/afollestad/ason.svg)](https://codecov.io/gh/afollestad/ason)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4e54317135c441df974e41ba868a954c)](https://www.codacy.com/app/drummeraidan_50/ason?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=afollestad/ason&amp;utm_campaign=Badge_Grade)
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 This library intends to make JSON very easy to interact with in Java; it also makes (de)serialization painless.
  

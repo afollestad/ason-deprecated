@@ -167,6 +167,15 @@ class AsonSerializer {
     if (isNull(fieldValue)) {
       return null;
     }
+    AsonAdapter adapterAnnotation = field.getAnnotation(AsonAdapter.class);
+    if (adapterAnnotation != null) {
+      try {
+        AsonSerializerAdapter serializer = adapterAnnotation.value().newInstance();
+        return serializer.toJson(fieldValue);
+      } catch (ReflectiveOperationException e) {
+        // just continue with normal operation
+      }
+    }
     if (isPrimitive(fieldValue)
         || fieldValue instanceof JSONObject
         || fieldValue instanceof JSONArray
@@ -222,6 +231,13 @@ class AsonSerializer {
           || type == Ason.class
           || type == AsonArray.class) {
         cacheEntry.set(newObject, name, ason.get(name));
+      } else if (cacheEntry.adapterType(name) != null) {
+        try {
+          AsonSerializerAdapter adapter = cacheEntry.adapterType(name).newInstance();
+          cacheEntry.set(newObject, name, adapter.fromJson(ason.get(name, String.class)));
+        } catch (ReflectiveOperationException e) {
+          e.printStackTrace(); // Can't really handle this differently here..
+        }
       } else if (type.isArray()) {
         AsonArray asonArray = ason.get(name);
         cacheEntry.set(newObject, name, deserializeArray(asonArray, type));

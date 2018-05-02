@@ -21,12 +21,14 @@ class ClassCacheEntry<T> {
   private final Constructor<?> ctor;
   private final HashMap<String, Field> fieldMap;
   private final HashMap<String, Class<?>> listGenericTypeMap;
+  private final HashMap<String, Class<? extends AsonSerializerAdapter>> adapterHashMap;
 
   ClassCacheEntry(Class<T> cls, boolean recursive) {
     this.cls = cls;
     this.fieldMap = new HashMap<>(4);
     this.ctor = getDefaultConstructor(cls);
     this.listGenericTypeMap = new HashMap<>(0);
+    this.adapterHashMap = new HashMap<>(0);
     invalidateFields(recursive);
   }
 
@@ -45,6 +47,10 @@ class ClassCacheEntry<T> {
       if (field.getType() == List.class) {
         listGenericTypeMap.put(name, listGenericType(field));
       }
+      AsonAdapter adapterAnnotation = field.getAnnotation(AsonAdapter.class);
+      if (adapterAnnotation != null) {
+        adapterHashMap.put(name, adapterAnnotation.value());
+      }
     }
   }
 
@@ -61,6 +67,10 @@ class ClassCacheEntry<T> {
 
   Class<?> listItemType(String fieldName) {
     return listGenericTypeMap.get(fieldName);
+  }
+
+  Class<? extends AsonSerializerAdapter> adapterType(String fieldName) {
+    return adapterHashMap.get(fieldName);
   }
 
   @SuppressWarnings("unchecked")
